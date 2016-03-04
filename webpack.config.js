@@ -44,7 +44,7 @@ var config = {
 
 if (process.env.NODE_ENV === 'production') {
   config.devtool = '#source-map';
-  config.plugins = [
+  config.plugins.unshift(
     new CleanWebpackPlugin(['build']),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
@@ -57,12 +57,8 @@ if (process.env.NODE_ENV === 'production') {
         comments: false
       }
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new HtmlWebpackPlugin({
-      template: 'app/index.tpl.html',
-      inject: true
-    })
-  ]
+    new webpack.optimize.OccurenceOrderPlugin()
+  )
 }
 
 module.exports = config;
