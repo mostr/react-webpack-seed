@@ -1,11 +1,11 @@
 var webpack = require('webpack');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
 
-module.exports = {
+var config = {
 	
 	entry: [
-		"webpack-hot-middleware/client",
-		"babel-polyfill",
 		path.resolve(__dirname, "app/app.js")
 	],
 
@@ -37,3 +37,28 @@ module.exports = {
 	]
 
 };
+
+if(process.env.NODE_ENV === 'production') {
+	config.devtool = '#source-map';
+	config.plugins = [
+		new CleanWebpackPlugin(['build']),
+		new webpack.optimize.DedupePlugin(),
+		new webpack.optimize.UglifyJsPlugin({
+			minimize: true,
+            mangle: true,
+            compress: {
+                warnings: false
+            },
+            output: {
+                comments: false
+            }
+		}),
+		new webpack.optimize.OccurenceOrderPlugin(),
+		new HtmlWebpackPlugin({
+			template: 'app/index.tpl.html',
+			inject: true
+		})
+	]
+}
+
+module.exports = config;
