@@ -5,14 +5,14 @@ var path = require('path');
 
 var config = {
 
-  entry: [
-    path.resolve(__dirname, "app/app.js")
-  ],
+  entry: {
+    app: path.resolve(__dirname, "app/app.js")
+  },
 
   output: {
     path: __dirname + '/build',
     publicPath: '/',
-    filename: './bundle.js'
+    filename: '[name].js'
   },
 
   devtool: "eval-source-map",
@@ -43,6 +43,10 @@ var config = {
 };
 
 if (process.env.NODE_ENV === 'production') {
+
+  var deps = require('./package.json').dependencies;
+  config.entry.vendor = Object.keys(deps);
+
   config.devtool = '#source-map';
   config.plugins.unshift(
     new CleanWebpackPlugin(['build']),
@@ -57,7 +61,10 @@ if (process.env.NODE_ENV === 'production') {
         comments: false
       }
     }),
-    new webpack.optimize.OccurenceOrderPlugin()
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor']
+    })
   )
 }
 
