@@ -3,7 +3,7 @@ var http = require('http');
 var express = require('express');
 
 var webpackConfig = require('./webpack.config.js');
-webpackConfig.entry.unshift("webpack-hot-middleware/client");
+webpackConfig.entry.app.unshift("webpack-hot-middleware/client");
 
 var compiler = webpack(webpackConfig);
 

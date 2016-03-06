@@ -6,7 +6,7 @@ var path = require('path');
 var config = {
 
   entry: {
-    app: path.resolve(__dirname, "app/app.js")
+    app: [path.resolve(__dirname, "app/app.js")]
   },
 
   output: {
